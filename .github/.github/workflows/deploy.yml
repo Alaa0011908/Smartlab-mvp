@@ -1,0 +1,22 @@
+name: Build and Deploy
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run build
+      - name: Deploy to Render
+        uses: endbug/add-and-commit@v9
+        with:
+          add: 'package-lock.json'
+          message: 'chore: auto-generate package-lock.json'
+          author_name: Render Bot
+          author_email: bot@render.com
